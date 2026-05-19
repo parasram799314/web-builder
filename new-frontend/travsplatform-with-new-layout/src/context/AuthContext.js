@@ -1,6 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, signInWithCustomToken } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
 
@@ -12,8 +12,28 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check for token in URL params
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    const initializeAuth = async () => {
+      if (token) {
+        localStorage.setItem("fb_token", token);
+        try {
+          await signInWithCustomToken(auth, token);
+          // Clean the URL
+          const newUrl = window.location.pathname + window.location.hash;
+          window.history.replaceState({}, document.title, newUrl);
+        } catch (error) {
+          console.error("Error signing in with token:", error);
+        }
+      }
+    };
+
+    initializeAuth();
+
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (user) {
+...
         setCurrentUser(user);
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));

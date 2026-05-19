@@ -22,7 +22,7 @@ function PrivateRoute({ children, allowedRoles }) {
 
   if (!currentUser) {
     // Redirect to your main dashboard login
-    window.location.href = "https://your-dashboard-url.com/login"; 
+    window.location.href = "http://localhost:3000/login"; 
     return null;
   }
 
@@ -33,7 +33,7 @@ function PrivateRoute({ children, allowedRoles }) {
           <h1 className="text-2xl font-bold text-red-600 mb-2">Access Denied</h1>
           <p className="text-gray-600">You do not have permission to access this page.</p>
           <button 
-            onClick={() => window.location.href = "https://your-dashboard-url.com"}
+            onClick={() => window.location.href = "http://localhost:3000"}
             className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
           >
             Go to Dashboard

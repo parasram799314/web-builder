@@ -21,14 +21,24 @@ function PrivateRoute({ children, allowedRoles }) {
   if (loading) return null;
 
   if (!currentUser) {
-    // Redirect to your main dashboard login
-    const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
-    if (!dashboardUrl) {
-      console.error("REACT_APP_DASHBOARD_URL is missing!");
-      return null;
-    }
-    window.location.href = `${dashboardUrl}/login`; 
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-sm">
+          <div className="text-5xl mb-4">🔑</div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h1>
+          <p className="text-gray-600 mb-6">Please log in from your dashboard to access this tool.</p>
+          <button 
+            onClick={() => {
+              const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL || "#";
+              if (dashboardUrl !== "#") window.location.href = dashboardUrl;
+            }}
+            className="w-full bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors font-bold"
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (allowedRoles && !allowedRoles.includes(role)) {

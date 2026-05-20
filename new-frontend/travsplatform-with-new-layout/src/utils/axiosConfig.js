@@ -1,4 +1,5 @@
 import axios from "axios";
+import { auth } from "../firebase/config";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -8,10 +9,22 @@ const axiosInstance = axios.create({
 
 // Request interceptor to add the token to the Authorization header
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("fb_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  async (config) => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        // This ensures the token is always fresh (Firebase handles refresh)
+        const token = await user.getIdToken();
+        config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Fallback to localStorage if currentUser is not yet available but token exists
+        const localToken = localStorage.getItem("fb_token");
+        if (localToken) {
+          config.headers.Authorization = `Bearer ${localToken}`;
+        }
+      }
+    } catch (error) {
+      console.error("Error getting auth token:", error);
     }
     return config;
   },

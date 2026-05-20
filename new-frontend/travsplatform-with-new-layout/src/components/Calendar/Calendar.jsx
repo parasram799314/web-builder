@@ -10,7 +10,7 @@ import SoftCalendar from "./calendar_theme/calendarsecond";
 const fmt = (y, m, d) =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 export function ClassicCalendar({ 
   selectedCountries: propCountries, 

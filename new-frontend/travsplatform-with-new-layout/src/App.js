@@ -22,7 +22,12 @@ function PrivateRoute({ children, allowedRoles }) {
 
   if (!currentUser) {
     // Redirect to your main dashboard login
-    window.location.href = "http://localhost:3000/login"; 
+    const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
+    if (!dashboardUrl) {
+      console.error("REACT_APP_DASHBOARD_URL is missing!");
+      return null;
+    }
+    window.location.href = `${dashboardUrl}/login`; 
     return null;
   }
 
@@ -33,7 +38,14 @@ function PrivateRoute({ children, allowedRoles }) {
           <h1 className="text-2xl font-bold text-red-600 mb-2">Access Denied</h1>
           <p className="text-gray-600">You do not have permission to access this page.</p>
           <button 
-            onClick={() => window.location.href = "http://localhost:3000"}
+            onClick={() => {
+              const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL;
+    if (!dashboardUrl) {
+      console.error("REACT_APP_DASHBOARD_URL is missing!");
+      return null;
+    }
+              window.location.href = dashboardUrl;
+            }}
             className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
           >
             Go to Dashboard

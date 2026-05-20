@@ -54,6 +54,8 @@ export default function MyLinksModal({ toolMode, onClose }) {
     }
   };
 
+  const externalSiteUrl = process.env.REACT_APP_EXTERNAL_SITE || window.location.origin;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-7 relative max-h-[80vh] flex flex-col">
@@ -115,21 +117,21 @@ export default function MyLinksModal({ toolMode, onClose }) {
                           <div className="flex items-center gap-2 overflow-hidden">
                             <span className="text-[10px] font-black text-orange-600 uppercase bg-orange-50 px-1.5 py-0.5 rounded shrink-0">Website Link</span>
                             <p className="text-[11px] text-gray-400 truncate font-mono">
-                              {window.location.origin}/view/{page.id}?mode=website
+                              {externalSiteUrl}/view/{page.id}?mode=website
                             </p>
                           </div>
                           <div className="flex items-center gap-1 opacity-0 group-hover/link:opacity-100 transition-opacity shrink-0 ml-2">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.open(`${window.location.origin}/view/${page.id}?mode=website`, "_blank");
+                                window.open(`${externalSiteUrl}/view/${page.id}?mode=website`, "_blank");
                               }}
                               className="p-1 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded"
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                             </button>
                             <button
-                              onClick={(e) => handleCopy(e, `${window.location.origin}/view/${page.id}?mode=website`)}
+                              onClick={(e) => handleCopy(e, `${externalSiteUrl}/view/${page.id}?mode=website`)}
                               className="p-1 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded"
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -141,21 +143,21 @@ export default function MyLinksModal({ toolMode, onClose }) {
                           <div className="flex items-center gap-2 overflow-hidden">
                             <span className="text-[10px] font-black text-blue-600 uppercase bg-blue-50 px-1.5 py-0.5 rounded shrink-0">Calendar Link</span>
                             <p className="text-[11px] text-gray-400 truncate font-mono">
-                              {window.location.origin}/view/{page.id}?mode=calendar
+                              {externalSiteUrl}/view/{page.id}?mode=calendar
                             </p>
                           </div>
                           <div className="flex items-center gap-1 opacity-0 group-hover/link:opacity-100 transition-opacity shrink-0 ml-2">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.open(`${window.location.origin}/view/${page.id}?mode=calendar`, "_blank");
+                                window.open(`${externalSiteUrl}/view/${page.id}?mode=calendar`, "_blank");
                               }}
                               className="p-1 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded"
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                             </button>
                             <button
-                              onClick={(e) => handleCopy(e, `${window.location.origin}/view/${page.id}?mode=calendar`)}
+                              onClick={(e) => handleCopy(e, `${externalSiteUrl}/view/${page.id}?mode=calendar`)}
                               className="p-1 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded"
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>

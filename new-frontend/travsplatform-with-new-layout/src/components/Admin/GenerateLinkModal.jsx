@@ -12,8 +12,9 @@ export default function GenerateLinkModal({ toolMode, onClose }) {
 
   const modeParam = toolMode === "calendar" ? "?mode=calendar" : "?mode=website";
 
+  const externalSiteUrl = process.env.REACT_APP_EXTERNAL_SITE || window.location.origin;
   const viewUrl = currentPageId
-    ? `${window.location.origin}/view/${currentPageId}${modeParam}`
+    ? `${externalSiteUrl}/view/${currentPageId}${modeParam}`
     : "Save/Publish first to get link";
 
   const handleGenerate = async () => {
@@ -144,7 +145,7 @@ export default function GenerateLinkModal({ toolMode, onClose }) {
                 </p>
                 <div className="space-y-1.5">
                   {extraPages.map((pId) => {
-                    const subUrl = `${window.location.origin}/view/${currentPageId}?subPage=${pId}`;
+                    const subUrl = `${externalSiteUrl}/view/${currentPageId}?subPage=${pId}`;
                     return (
                       <div key={pId} className="flex items-center gap-2 border border-gray-100 rounded-lg px-3 py-2 bg-gray-50">
                         <span className="text-[10px] font-black text-orange-500 uppercase bg-orange-50 px-1.5 py-0.5 rounded shrink-0">

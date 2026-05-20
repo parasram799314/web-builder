@@ -18,6 +18,8 @@ export default function ViewPage() {
   const [pageData, setPageData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationError, setVerificationError] = useState(null);
   const [visitCountry, setVisitCountry] = useState("india");
 
   // --- Scroll to top on navigation ---
@@ -25,11 +27,57 @@ export default function ViewPage() {
     window.scrollTo(0, 0);
   }, [location.pathname, location.search]);
 
+  // Handle Token Verification (SSO from Dashboard)
+  useEffect(() => {
+    const token = queryParams.get("token");
+    if (token) {
+      const verifyToken = async () => {
+        setIsVerifying(true);
+        try {
+          const API_BASE = process.env.REACT_APP_API_URL;
+        if (!API_BASE) {
+          console.error("REACT_APP_API_URL is missing in environment variables!");
+          if (typeof setIsVerifying === 'function') setIsVerifying(false);
+          return;
+        }
+          const response = await fetch(`${API_BASE}/verify-token`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Token verification failed");
+          }
+
+          const result = await response.json();
+          console.log("Token verified:", result);
+          
+          // Token is valid, remove it from URL for security
+          const url = new URL(window.location);
+          url.searchParams.delete("token");
+          window.history.replaceState({}, document.title, url.pathname + url.search);
+        } catch (err) {
+          console.error("Auth Error:", err);
+          setVerificationError("Access denied. Please login from the dashboard again.");
+        } finally {
+          setIsVerifying(false);
+        }
+      };
+      verifyToken();
+    }
+  }, [location.search, queryParams]);
+
   // Load data - run once per pageId
   useEffect(() => {
     const load = async () => {
       try {
-        const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+        const API_BASE = process.env.REACT_APP_API_URL;
+        if (!API_BASE) {
+          console.error("REACT_APP_API_URL is missing in environment variables!");
+          if (typeof setIsVerifying === 'function') setIsVerifying(false);
+          return;
+        }
         const response = await fetch(`${API_BASE}/pages/view/${pageId}`);
        
         const data = await response.json();
@@ -54,12 +102,30 @@ export default function ViewPage() {
     load();
   }, [pageId]);
 
-  if (loading) {
+  if (loading || isVerifying) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-orange-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-gray-500 text-sm">Loading…</p>
+          <p className="text-gray-500 text-sm">{isVerifying ? "Verifying Access..." : "Loading…"}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (verificationError) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-3xl shadow-xl border border-red-100 max-w-md">
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Authentication Failed</h2>
+          <p className="text-red-500 text-sm mb-6">{verificationError}</p>
+          <button 
+            onClick={() => window.location.href = "/"}
+            className="bg-orange-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-600 transition-all"
+          >
+            Go to Home
+          </button>
         </div>
       </div>
     );

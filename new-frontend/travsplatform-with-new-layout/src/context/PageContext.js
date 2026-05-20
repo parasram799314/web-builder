@@ -6,7 +6,7 @@ import axiosInstance from "../utils/axiosConfig";
 
 const PageContext = createContext();
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const DEFAULT_PAGE_DATA = {
   branding: { type: "text", value: "travsplatform" },

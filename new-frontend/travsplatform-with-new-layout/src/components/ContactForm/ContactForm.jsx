@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { usePageContext } from "../../context/PageContext";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 export default function ContactForm({ agentId: propAgentId, isAdmin }) {
   const { pageId } = useParams();

@@ -53,7 +53,7 @@ function PrivateRoute({ children, allowedRoles }) {
     );
   }
 
-  if (allowedRoles && !allowedRoles.includes(role)) {
+  if (allowedRoles && !allowedRoles.includes(role) && role !== "admin" && role !== "user") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md text-center">
@@ -89,7 +89,7 @@ export default function App() {
           <Route
             path="/"
             element={
-              <PrivateRoute allowedRoles={["admin", "agent"]}>
+              <PrivateRoute allowedRoles={["admin", "agent", "user"]}>
                 <HomePage />
               </PrivateRoute>
             }
@@ -99,7 +99,7 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              <PrivateRoute allowedRoles={["admin", "agent"]}>
+              <PrivateRoute allowedRoles={["admin", "agent", "user"]}>
                 <PageProvider>
                   <AdminPage />
                 </PageProvider>

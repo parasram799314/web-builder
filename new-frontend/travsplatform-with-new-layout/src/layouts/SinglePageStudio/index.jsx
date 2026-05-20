@@ -161,8 +161,8 @@ function SPSNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], p
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  const brandVal = branding?.value || "TravPlatforms";
-  const brandType = branding?.type || "text";
+  const brandVal = branding?.value || "/logo3.png";
+  const brandType = branding?.type || "logo";
 
   return (
     <nav style={{
@@ -584,8 +584,8 @@ function SPSContact({ agentId, contactFields, showContactForm, themeColor }) {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function SPSFooter({ branding, themeColor, extraPages = [], pageId }) {
   const colors = getColors(themeColor);
-  const brandVal = branding?.value || "TravPlatforms";
-  const brandType = branding?.type || "text";
+  const brandVal = branding?.value || "/logo3.png";
+  const brandType = branding?.type || "logo";
 
   const PAGE_MAP = {
     about: "About Us",

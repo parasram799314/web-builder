@@ -132,8 +132,8 @@ function injectCSS() {
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 function MTNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], pageId, onPageClick }) {
-  const brandVal = branding?.value || "travsplatform";
-  const brandType = branding?.type || "text";
+  const brandVal = branding?.value || "/logo3.png";
+  const brandType = branding?.type || "logo";
   const color = themeColor || "#E8960C";
 
   const PAGE_MAP = {
@@ -569,8 +569,8 @@ function MTContact({ agentId, contactFields, themeColor }) {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function MTFooter({ branding, themeColor, isAdmin, onUpdate, data, extraPages = [], pageId }) {
   const color = themeColor || "#E8960C";
-  const brandVal = branding?.value || "travsplatform";
-  const brandType = branding?.type || "text";
+  const brandVal = branding?.value || "/logo3.png";
+  const brandType = branding?.type || "logo";
   const footerDesc = data?.description || "Smart travel planning with holiday calendars, curated packages, and exclusive deals.";
 
   const PAGE_MAP = {

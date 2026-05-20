@@ -3,8 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar({ branding, themeColor, extraPages = [], pageId, isAdmin, onPageClick }) {
-  const brandingValue = branding?.value || "travsplatform";
-  const brandingType = branding?.type || "text";
+  const brandingValue = branding?.value || "/logo3.png";
+  const brandingType = branding?.type || "logo";
   const bgColor = themeColor || "#E8960C";
 
   const PAGE_MAP = {

@@ -27,10 +27,9 @@ export default function AdminNavbar({ toolMode, onGenerateLink, onViewTable, onS
       <div className="flex items-center gap-3">
         <button 
           onClick={() => navigate("/")}
-          className="text-white text-xl font-black tracking-tight hover:opacity-80 transition-opacity"
-          style={{ fontFamily: "Georgia, serif" }}
+          className="hover:opacity-80 transition-opacity"
         >
-          {brandingName}
+          <img src="/logo3.png" alt="Logo" className="h-8 w-auto object-contain" />
         </button>
         <span className="bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
           {toolMode === "calendar" ? "Calendar Builder" : "Website Builder"}

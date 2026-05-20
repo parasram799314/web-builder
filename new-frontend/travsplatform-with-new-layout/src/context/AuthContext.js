@@ -70,6 +70,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem("fb_token", idToken);
         
         try {
+          console.log("Fetching doc for uid:", user.uid);
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             const fetchedRole = userDoc.data().role || "user";

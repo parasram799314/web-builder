@@ -62,6 +62,7 @@ app.use("/api/contact", require("./routes/contact"));
 app.use("/api/upload", require("./routes/upload"));
 app.use("/api/calendar", require("./routes/calendar"));
 app.use("/api/email", require("./routes/email"));
+app.use("/api/users", require("./routes/users"));
 
 // ── Static Files (Frontend Build) ─────────────────────────────────
 const buildPath = path.resolve(__dirname, "../../new-frontend/travsplatform-with-new-layout/build");

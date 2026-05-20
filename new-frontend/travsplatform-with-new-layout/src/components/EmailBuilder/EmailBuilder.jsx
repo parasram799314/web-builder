@@ -4,7 +4,7 @@ import WanderlustLuxury from "./promotions/one";
 import AzureTrails from "./promotions/second";
 import BookingConfirmation from "./confirmations/first";
 
-import { auth } from "../../firebase/config";
+import axiosInstance from "../../utils/axiosConfig";
 
 // ── Send Email Modal ─────────────────────────────────────────────────────────
 function SendEmailModal({ template, onClose, templateData }) {
@@ -57,31 +57,21 @@ function SendEmailModal({ template, onClose, templateData }) {
     setError("");
 
     try {
-      const idToken = await auth.currentUser?.getIdToken();
-      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
-      
-      const response = await fetch(`${API_URL}/email/send`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({
-          to: email,
-          subject: `Your ${template.name} is ready!`,
-          templateId: template.id,
-          data: templateData[template.id], // Send the edited data!
-          color: template.color // Send the template color!
-        }),
+      const response = await axiosInstance.post("/email/send", {
+        to: email,
+        subject: `Your ${template.name} is ready!`,
+        templateId: template.id,
+        data: templateData[template.id], // Send the edited data!
+        color: template.color // Send the template color!
       });
 
-      if (!response.ok) throw new Error("Failed to send email");
+      if (response.status !== 200) throw new Error("Failed to send email");
 
       setSent(true);
       setTimeout(() => onClose(), 2000);
     } catch (err) {
       console.error("Send Error:", err);
-      setError("Failed to send email. Check backend logs.");
+      setError(err.response?.data?.error || "Failed to send email. Check backend logs.");
     } finally {
       setSending(false);
     }

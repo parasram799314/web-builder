@@ -1,8 +1,7 @@
 // src/components/Admin/InquiriesList.jsx
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+import axiosInstance from "../../utils/axiosConfig";
 
 export default function InquiriesList() {
   const { currentUser } = useAuth();
@@ -12,18 +11,14 @@ export default function InquiriesList() {
 
   const fetchInquiries = async () => {
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/contact/inquiries`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setInquiries(data.inquiries || []);
+      const response = await axiosInstance.get("/contact/inquiries");
+      if (response.data && response.data.inquiries) {
+        setInquiries(response.data.inquiries);
       } else {
-        setError(data.error || "Failed to load inquiries");
+        setError("Failed to load inquiries");
       }
     } catch (err) {
-      setError("Server error");
+      setError(err.response?.data?.error || "Server error");
     } finally {
       setLoading(false);
     }
@@ -35,12 +30,8 @@ export default function InquiriesList() {
 
   const markAsRead = async (id) => {
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/contact/inquiries/${id}/read`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
+      const response = await axiosInstance.patch(`/contact/inquiries/${id}/read`);
+      if (response.status === 200) {
         setInquiries((prev) =>
           prev.map((inq) => (inq.id === id ? { ...inq, read: true } : inq))
         );

@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { DEFAULT_PACKAGES } from "../data/holidays";
+import axiosInstance from "../utils/axiosConfig";
 
 const PageContext = createContext();
 
@@ -127,17 +128,13 @@ export function PageProvider({ children }) {
   const fetchGlobalPackages = useCallback(async () => {
     if (!currentUser) return;
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/packages`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      if (response.ok && data.packages) {
+      const response = await axiosInstance.get("/packages");
+      if (response.data && response.data.packages) {
         // Only update draftData with global packages if we don't have local packages yet 
         // or if we are explicitly initializing/syncing
         setDraftData(prev => ({ 
           ...prev, 
-          packages: data.packages.length > 0 ? data.packages : prev.packages 
+          packages: response.data.packages.length > 0 ? response.data.packages : prev.packages 
         }));
       }
     } catch (e) {
@@ -148,38 +145,24 @@ export function PageProvider({ children }) {
   const addGlobalPackage = async (pkg) => {
     if (!currentUser) return;
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/packages`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(pkg),
-      });
-      if (response.ok) fetchGlobalPackages();
+      const response = await axiosInstance.post("/packages", pkg);
+      if (response.status === 200 || response.status === 201) fetchGlobalPackages();
     } catch (e) { console.error(e); }
   };
 
   const updateGlobalPackage = async (pkgId, updates) => {
     if (!currentUser) return;
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/packages/${pkgId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(updates),
-      });
-      if (response.ok) fetchGlobalPackages();
+      const response = await axiosInstance.put(`/packages/${pkgId}`, updates);
+      if (response.status === 200) fetchGlobalPackages();
     } catch (e) { console.error(e); }
   };
 
   const deleteGlobalPackage = async (pkgId) => {
     if (!currentUser) return;
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/packages/${pkgId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) fetchGlobalPackages();
+      const response = await axiosInstance.delete(`/packages/${pkgId}`);
+      if (response.status === 200) fetchGlobalPackages();
     } catch (e) { console.error(e); }
   };
 
@@ -187,12 +170,8 @@ export function PageProvider({ children }) {
   const fetchAllPages = useCallback(async (type = "website") => {
     if (!currentUser) return;
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/pages?type=${type}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      if (response.ok) setAllPages(data.pages || []);
+      const response = await axiosInstance.get(`/pages?type=${type}`);
+      if (response.data) setAllPages(response.data.pages || []);
     } catch (e) {
       console.error("Error fetching all pages:", e);
     }
@@ -202,12 +181,9 @@ export function PageProvider({ children }) {
     if (!currentUser) return;
     setLoadingPage(true);
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/pages/${pageId}?type=${type}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      if (response.ok && data.page) {
+      const response = await axiosInstance.get(`/pages/${pageId}?type=${type}`);
+      const data = response.data;
+      if (data && data.page) {
         const draft = data.page.draft || DEFAULT_PAGE_DATA;
         const published = data.page.publishedVersion || DEFAULT_PAGE_DATA;
         setDraftData({ ...DEFAULT_PAGE_DATA, ...draft });
@@ -250,14 +226,14 @@ export function PageProvider({ children }) {
       if (typeof nameToSave !== "string") nameToSave = nameToSave?.branding?.value || "Untitled Page";
       const dataToSave = dataOverride || draftRef.current;
       try {
-        const token = await currentUser.getIdToken();
-        const response = await fetch(`${API_BASE_URL}/pages/save`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ ...dataToSave, pageId: currentPageId, pageName: nameToSave, pageType }),
+        const response = await axiosInstance.put("/pages/save", { 
+          ...dataToSave, 
+          pageId: currentPageId, 
+          pageName: nameToSave, 
+          pageType 
         });
-        const result = await response.json();
-        if (response.ok) {
+        const result = response.data;
+        if (response.status === 200) {
           if (!currentPageId) setCurrentPageId(result.pageId);
           setPageName(nameToSave);
           setSaveMsg("Saved!");
@@ -284,20 +260,20 @@ export function PageProvider({ children }) {
         const id = await saveDraft(customName, null, pageType);
         const finalId = id || currentPageId;
         if (!finalId) throw new Error("Could not determine Page ID");
-        const token = await currentUser.getIdToken();
-        const response = await fetch(`${API_BASE_URL}/pages/publish/${finalId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ pageName: customName || pageName, pageType })
+        
+        const response = await axiosInstance.post(`/pages/publish/${finalId}`, { 
+          pageName: customName || pageName, 
+          pageType 
         });
-        if (response.ok) {
+        
+        if (response.status === 200) {
           setPublishedData({ ...draftData, published: true });
           setSaveMsg("Published! 🎉");
           fetchAllPages(pageType);
           setTimeout(() => setSaveMsg(""), 3000);
           return true;
         } else {
-          const result = await response.json();
+          const result = response.data;
           setSaveMsg(result.error || "Publish failed.");
           return false;
         }
@@ -313,12 +289,8 @@ export function PageProvider({ children }) {
   const deletePage = useCallback(async (pageId, type = "website") => {
     if (!currentUser) return;
     try {
-      const token = await currentUser.getIdToken();
-      const response = await fetch(`${API_BASE_URL}/pages/${pageId}?type=${type}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
+      const response = await axiosInstance.delete(`/pages/${pageId}?type=${type}`);
+      if (response.status === 200) {
         if (currentPageId === pageId) {
           setCurrentPageId(null);
           setDraftData(DEFAULT_PAGE_DATA);

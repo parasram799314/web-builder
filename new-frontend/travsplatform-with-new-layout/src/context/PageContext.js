@@ -219,7 +219,7 @@ export function PageProvider({ children }) {
 
   const saveDraft = useCallback(
     async (customName, dataOverride, pageType = "website") => {
-      if (!currentUser) return null;
+      if (!currentUser || saving) return null;
       setSaving(true);
       // Use ref for name and data if not explicitly provided to avoid stale closures
       let nameToSave = customName || nameRef.current;
@@ -244,8 +244,9 @@ export function PageProvider({ children }) {
           setSaveMsg(result.error || "Error saving.");
         }
       } catch (e) {
-        setSaveMsg("Error saving.");
-        console.error(e);
+        console.error("Save Error:", e);
+        const errorMsg = e.response?.data?.error || e.message || "Error saving.";
+        setSaveMsg(`Error: ${errorMsg}`);
       } finally { setSaving(false); }
       return null;
     },
@@ -259,7 +260,7 @@ export function PageProvider({ children }) {
       try {
         const id = await saveDraft(customName, null, pageType);
         const finalId = id || currentPageId;
-        if (!finalId) throw new Error("Could not determine Page ID");
+        if (!finalId) throw new Error("Could not determine Page ID. Please save as draft first.");
         
         const response = await axiosInstance.post(`/pages/publish/${finalId}`, { 
           pageName: customName || pageName, 
@@ -278,8 +279,9 @@ export function PageProvider({ children }) {
           return false;
         }
       } catch (e) {
-        setSaveMsg("Error publishing.");
-        console.error(e);
+        console.error("Publish Error:", e);
+        const errorMsg = e.response?.data?.error || e.message || "Error publishing.";
+        setSaveMsg(`Error: ${errorMsg}`);
         return false;
       } finally { setPublishing(false); }
     },

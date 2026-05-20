@@ -35,7 +35,13 @@ app.use(
   cors({
     origin: function (origin, callback) {
       // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Also allow any .vercel.app subdomain for easier deployment
+      if (
+        !origin || 
+        allowedOrigins.includes(origin) || 
+        (origin.endsWith(".vercel.app")) ||
+        (process.env.NODE_ENV !== "production")
+      ) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS: " + origin));
@@ -48,8 +54,8 @@ app.use(
 app.options("*", cors());
 
 // ── Body parsers ──────────────────────────────────────────────────
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // ── Rate limiting ─────────────────────────────────────────────────
 const generalLimiter = rateLimit({
@@ -123,7 +129,11 @@ app.use((err, req, res, next) => {
 });
 
 // ── Start server ──────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`\n🚀 Travsplatform backend running on http://localhost:${PORT}`);
-  console.log(`   Health: http://localhost:${PORT}/health\n`);
-});
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Travsplatform backend running on http://localhost:${PORT}`);
+    console.log(`   Health: http://localhost:${PORT}/health\n`);
+  });
+}
+
+module.exports = app;

@@ -1,9 +1,7 @@
-// src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, signInWithCustomToken } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
-import axiosInstance from "../utils/axiosConfig";
 
 const AuthContext = createContext();
 
@@ -12,35 +10,55 @@ export function AuthProvider({ children }) {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUserProfile = async (token) => {
-    try {
-      const response = await axiosInstance.get("/users/profile");
-      if (response.data && response.data.user) {
-        const { uid, email, role: userRole } = response.data.user;
-        setCurrentUser({ uid, email });
-        setRole(userRole);
-      }
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-      localStorage.removeItem("fb_token"); // Remove invalid token
-    }
-  };
-
   useEffect(() => {
-    // 1. Token Extraction & Storage
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
+    const handleSSO = async () => {
+      // 1. Token Extraction (Handles both ?token= and /token=)
+      const queryParams = new URLSearchParams(window.location.search);
+      let token = queryParams.get("token");
 
-    if (token) {
-      localStorage.setItem("fb_token", token);
-      // Clean the URL
-      const newUrl = window.location.pathname + window.location.hash;
-      window.history.replaceState({}, document.title, newUrl);
-    }
+      // Check for /token= format if not found in query params (e.g. .../token=abc)
+      if (!token && window.location.pathname.includes("token=")) {
+        token = window.location.pathname.split("token=")[1];
+      }
+
+      if (token) {
+        try {
+          console.log("SSO Token detected, verifying...");
+          const API_BASE = process.env.REACT_APP_API_URL;
+          
+          if (!API_BASE) {
+             console.error("REACT_APP_API_URL missing for SSO verification");
+             return;
+          }
+
+          const response = await fetch(`${API_BASE}/verify-token`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
+          });
+
+          if (response.ok) {
+            const { customToken } = await response.json();
+            // 2. Sign in to Firebase with the Custom Token
+            await signInWithCustomToken(auth, customToken);
+            console.log("SSO Login Successful via Custom Token");
+            
+            // Clean the URL for security (remove token from path or query)
+            const cleanUrl = window.location.origin + window.location.pathname.replace(/\/token=.*/, "");
+            window.history.replaceState({}, document.title, cleanUrl);
+          } else {
+             console.error("SSO Verification failed on backend");
+          }
+        } catch (error) {
+          console.error("SSO Process Error:", error);
+        }
+      }
+    };
+
+    handleSSO();
 
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // User is logged in via Firebase Auth directly
         setCurrentUser(user);
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -50,28 +68,20 @@ export function AuthProvider({ children }) {
             setRole("user");
           }
         } catch (error) {
-          console.error("Error fetching user role from Firestore:", error);
+          console.error("Error fetching user role:", error);
           setRole("user");
         }
-        setLoading(false);
       } else {
-        // 3. Session Recovery & Profile Sync
-        const storedToken = localStorage.getItem("fb_token");
-        if (storedToken) {
-          await fetchUserProfile(storedToken);
-        } else {
-          setCurrentUser(null);
-          setRole(null);
-        }
-        setLoading(false);
+        setCurrentUser(null);
+        setRole(null);
       }
+      setLoading(false);
     });
 
     return unsub;
   }, []);
 
   const logout = () => {
-    localStorage.removeItem("fb_token");
     signOut(auth);
   };
 
@@ -85,4 +95,3 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
-

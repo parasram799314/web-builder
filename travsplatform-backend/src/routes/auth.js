@@ -15,17 +15,19 @@ router.post("/verify-token", async (req, res) => {
 
   try {
     const auth = getAuth();
-    // Verify the token using Firebase Admin SDK
+    // 1. Verify the ID Token from Dashboard
     const decodedToken = await auth.verifyIdToken(token);
-    
-    // You can also check roles or other claims here
-    // const uid = decodedToken.uid;
+    const uid = decodedToken.uid;
 
+    // 2. Create a Custom Token for this user to log in on the Builder site
+    const customToken = await auth.createCustomToken(uid);
+    
     res.json({
       success: true,
-      uid: decodedToken.uid,
+      customToken,
+      uid: uid,
       email: decodedToken.email,
-      message: "Token verified successfully"
+      message: "SSO Token generated"
     });
   } catch (error) {
     console.error("Token verification failed:", error);

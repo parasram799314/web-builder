@@ -72,8 +72,11 @@ export function AuthProvider({ children }) {
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
-            setRole(userDoc.data().role || "user");
+            const fetchedRole = userDoc.data().role || "user";
+            console.log("AuthContext: Role fetched from Firestore:", fetchedRole);
+            setRole(fetchedRole);
           } else {
+            console.log("AuthContext: User doc not found, defaulting to 'user'");
             setRole("user");
           }
         } catch (error) {

@@ -18,6 +18,8 @@ import TermsPage from "./website-buildpage/TermsPage";
 function PrivateRoute({ children, allowedRoles }) {
   const { currentUser, role, loading } = useAuth();
   
+  console.log("PrivateRoute Render - Loading:", loading, "Role:", role, "User:", currentUser?.email);
+
   // Show loading while checking auth status OR if user exists but role isn't loaded yet
   if (loading || (currentUser && allowedRoles && role === null)) {
     return (

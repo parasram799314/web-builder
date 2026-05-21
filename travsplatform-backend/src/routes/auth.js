@@ -18,8 +18,24 @@ router.post("/verify-token", async (req, res) => {
     // 1. Verify the ID Token from Dashboard
     const decodedToken = await auth.verifyIdToken(token);
     const uid = decodedToken.uid;
+    const email = decodedToken.email;
 
-    // 2. Create a Custom Token for this user to log in on the Builder site
+    // 2. Ensure user exists in Firestore with 'agent' role
+    const db = require("../config/firebase").getDb();
+    const userRef = db.collection("users").doc(uid);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      await userRef.set({
+        email: email,
+        role: "agent",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+      console.log(`Created new agent record for: ${email}`);
+    }
+
+    // 3. Create a Custom Token for this user to log in on the Builder site
     const customToken = await auth.createCustomToken(uid);
     
     res.json({

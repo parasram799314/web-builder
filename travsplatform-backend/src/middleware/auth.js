@@ -19,6 +19,8 @@ async function verifyToken(req, res, next) {
     const userDoc = await getDb().collection("users").doc(decoded.uid).get();
     const role = userDoc.exists ? (userDoc.data().role || "user") : "user";
 
+    console.log(`User Auth: ${decoded.email} (${decoded.uid}) | Role: ${role}`);
+
     req.user = {
       uid: decoded.uid,
       email: decoded.email,
@@ -39,6 +41,7 @@ async function verifyToken(req, res, next) {
 function requireRole(allowedRoles) {
   return (req, res, next) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
+      console.warn(`Forbidden: Access denied for role "${req.user?.role}". Allowed: ${allowedRoles}`);
       return res.status(403).json({ error: "Forbidden: Access denied" });
     }
     next();

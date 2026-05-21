@@ -35,8 +35,11 @@ export function AuthProvider({ children }) {
 
           const response = await fetch(`${API_BASE}/verify-token`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token }),
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            // body: JSON.stringify({ token }), // Security: Moved to Header
           });
 
           if (response.ok) {

@@ -7,7 +7,12 @@ const { getAuth } = require("../config/firebase");
  * Verifies a Firebase ID token sent from the dashboard.
  */
 router.post("/verify-token", async (req, res) => {
-  const { token } = req.body;
+  let { token } = req.body;
+
+  // Fallback to Authorization header if token not in body
+  if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+    token = req.headers.authorization.split("Bearer ")[1];
+  }
 
   if (!token) {
     return res.status(400).json({ error: "Token is required" });

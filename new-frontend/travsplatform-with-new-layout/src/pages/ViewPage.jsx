@@ -147,7 +147,15 @@ export default function ViewPage() {
 
   // Handle Extra Pages - Use key to force re-mount when switching between subpages
   if (subPage) {
-    return <ExtraPage key={subPage} type={subPage} pageData={pageData} pageId={pageId} />;
+    return (
+      <React.Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        <ExtraPage key={subPage} type={subPage} pageData={pageData} pageId={pageId} />
+      </React.Suspense>
+    );
   }
 
   // If a custom layout is selected, render that layout
@@ -158,10 +166,16 @@ export default function ViewPage() {
     const LayoutComponent = layoutEntry.Layout;
     return (
       <div className="min-h-screen">
-        <LayoutComponent
-          draftData={pageData}
-          agentId={pageId}
-        />
+        <React.Suspense fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <LayoutComponent
+            draftData={pageData}
+            agentId={pageId}
+          />
+        </React.Suspense>
       </div>
     );
   }

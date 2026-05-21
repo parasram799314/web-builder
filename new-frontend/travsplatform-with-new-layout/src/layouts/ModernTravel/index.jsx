@@ -400,10 +400,10 @@ function MTDestinations({ themeColor, data, isAdmin, onUpdate }) {
   const badge = data?.subtitle || "Explore";
 
   const defaultDestinations = [
-    { title: "Mountain Retreats", subtitle: "Himalayas & Beyond", img: "/assets/dest-mountains.jpg", trips: "120+ trips" },
-    { title: "Coastal Paradise", subtitle: "Beaches & Islands", img: "/assets/dest-beach.jpg", trips: "200+ trips" },
-    { title: "Cultural Heritage", subtitle: "Temples & History", img: "/assets/dest-culture.jpg", trips: "85+ trips" },
-    { title: "Tropical Escapes", subtitle: "Goa & Kerala", img: "/assets/gokarna.jpg", trips: "150+ trips" },
+    { title: "Mountain Retreats", subtitle: "Himalayas & Beyond", img: "/assets/dest-mountains.webp", trips: "120+ trips" },
+    { title: "Coastal Paradise", subtitle: "Beaches & Islands", img: "/assets/dest-beach.webp", trips: "200+ trips" },
+    { title: "Cultural Heritage", subtitle: "Temples & History", img: "/assets/dest-culture.webp", trips: "85+ trips" },
+    { title: "Tropical Escapes", subtitle: "Goa & Kerala", img: "/assets/gokarna.webp", trips: "150+ trips" },
   ];
 
   const destinations = data?.items || defaultDestinations;

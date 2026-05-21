@@ -1,19 +1,22 @@
-// src/layouts/index.js
-// All available website layouts registered here.
-// Add a new layout: create folder in src/layouts/, import here.
+import React, { lazy } from "react";
 
-import ModernTravelLayout, {
+// Lazy load layout components
+const ModernTravelLayout = lazy(() => import("./ModernTravel"));
+const SinglePageStudioLayout = lazy(() => import("./SinglePageStudio"));
+
+// Note: Previews are usually small or used in admin, but we can lazy load them too if needed.
+// For now, let's keep them as is or lazy load if they are heavy.
+import {
   layoutConfig as modernTravelConfig,
   LayoutPreview as ModernTravelPreview,
 } from "./ModernTravel";
 
-import SinglePageStudioLayout, {
+import {
   layoutConfig as singlePageStudioConfig,
   LayoutPreview as SinglePageStudioPreview,
 } from "./SinglePageStudio";
 
 // Define a function to get layouts to avoid "Cannot access before initialization" errors
-// which can happen during circular dependency evaluation.
 export function getAllLayouts() {
   return [
     {
@@ -28,6 +31,7 @@ export function getAllLayouts() {
     },
   ];
 }
+
 
 export const ALL_LAYOUTS = getAllLayouts();
 

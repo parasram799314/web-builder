@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { usePageContext } from "../../../context/PageContext";
 import { ALL_HOLIDAYS, MONTHS, DAYS, COUNTRY_OPTIONS, getFlagUrl } from "../../../data/holidays";
 import SearchableSelect from "../../Common/SearchableSelect";
-import heroTravel from "../../../assets/hero-bg.jpg";
+import heroTravel from "../../../assets/hero-bg.webp";
 
 const fmt = (y, m, d) =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
@@ -220,7 +220,7 @@ export default function ProfessionalCalendar({
           {/* Main Hero: Family/Traveler */}
           <div className="flex-[2] relative overflow-hidden group">
             <img 
-              src="/assets/hero-travel.jpg" 
+              src="/assets/hero-travel.webp" 
               alt="Happy Family Travel" 
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
@@ -235,10 +235,10 @@ export default function ProfessionalCalendar({
           {/* Side Thumbnails: Destinations */}
           <div className="flex-1 flex flex-col border-l border-white">
             <div className="flex-1 relative overflow-hidden border-b border-white">
-              <img src="/assets/dest-beach.jpg" alt="Beach" className="absolute inset-0 w-full h-full object-cover" />
+              <img src="/assets/dest-beach.webp" alt="Beach" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             <div className="flex-1 relative overflow-hidden">
-              <img src="/assets/dest-mountains.jpg" alt="Mountains" className="absolute inset-0 w-full h-full object-cover" />
+              <img src="/assets/dest-mountains.webp" alt="Mountains" className="absolute inset-0 w-full h-full object-cover" />
             </div>
           </div>
 

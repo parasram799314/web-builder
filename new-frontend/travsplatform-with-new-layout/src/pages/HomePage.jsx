@@ -76,24 +76,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
-      {/* Navbar */}
-      <nav
-        style={{ background: "#E8960C" }}
-        className="h-14 px-8 shadow-sm z-50 border-b border-orange-600 shrink-0 flex items-center justify-between"
-      >
-        {/* Left: Logo Only */}
-        <div 
-          onClick={() => navigate("/")}
-          className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity"
-        >
-          <img src="/logo3.png" alt="Logo" className="h-9 w-auto object-contain" />
-        </div>
-
-        {/* Right: Empty */}
-        <div className="flex items-center gap-4">
-        </div>
-      </nav>
-
       {/* Main Content */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-8 py-8 flex flex-col justify-center">
         {/* Welcome Header */}

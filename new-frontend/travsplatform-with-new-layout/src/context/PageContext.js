@@ -123,6 +123,7 @@ export function PageProvider({ children }) {
   const [publishing, setPublishing] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
   const [loadingPage, setLoadingPage] = useState(true);
+  const [backendWakingUp, setBackendWakingUp] = useState(false);
 
   // --- GLOBAL PACKAGES LOGIC ---
   const fetchGlobalPackages = useCallback(async () => {
@@ -325,16 +326,31 @@ export function PageProvider({ children }) {
 
   useEffect(() => {
     if (!currentUser) { setLoadingPage(false); return; }
+    
+    // Set a timeout to show "Waking up" message if backend takes > 3s
+    const wakeTimeout = setTimeout(() => {
+      setBackendWakingUp(true);
+    }, 3000);
+
     const init = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const mode = urlParams.get("tool") || "website";
-      await Promise.all([fetchAllPages(mode), fetchGlobalPackages()]);
-      setLoadingPage(false);
+      try {
+        await Promise.all([fetchAllPages(mode), fetchGlobalPackages()]);
+      } catch (e) {
+        console.error("Initialization error:", e);
+      } finally {
+        clearTimeout(wakeTimeout);
+        setLoadingPage(false);
+        setBackendWakingUp(false);
+      }
     };
     init();
   }, [currentUser, fetchAllPages, fetchGlobalPackages]);
 
-  const isDirty = JSON.stringify(draftData) !== JSON.stringify(publishedData);
+  const isDirty = React.useMemo(() => {
+    return JSON.stringify(draftData) !== JSON.stringify(publishedData);
+  }, [draftData, publishedData]);
 
   return (
     <PageContext.Provider
@@ -360,6 +376,7 @@ export function PageProvider({ children }) {
         publishing,
         saveMsg,
         loadingPage,
+        backendWakingUp,
         updateField,
         updateSubpageField,
         isDirty,

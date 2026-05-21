@@ -23,6 +23,8 @@ const PORT = process.env.PORT || 5000;
 // ── Security & Logging middleware ─────────────────────────────────
 app.use(helmet({
   contentSecurityPolicy: false, // Disable CSP for now to allow external images/scripts easily
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
+  crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
 app.use(morgan("dev"));
 

@@ -14,12 +14,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC8c-sBdLvA-HoDXV_LrvEZlz0Y2oTSMFM",
-  authDomain: "ticketing-a5ad5.firebaseapp.com",
-  projectId: "ticketing-a5ad5",
-  storageBucket: "ticketing-a5ad5.firebasestorage.app",
-  messagingSenderId: "946048825410",
-  appId: "1:946048825410:web:2b171b9579cabe73b815db",
+  apiKey: "AIzaSyCh_DEukwzsHiOzZeff5G_l7vHWsbZsVOY",
+  authDomain: "tripplanner-f22be.firebaseapp.com",
+  projectId: "tripplanner-f22be",
+  storageBucket: "tripplanner-f22be.firebasestorage.app",
+  messagingSenderId: "455181925668",
+  appId: "1:455181925668:web:9098513c53f324ad0c87b1",
 };
 
 const app = initializeApp(firebaseConfig);

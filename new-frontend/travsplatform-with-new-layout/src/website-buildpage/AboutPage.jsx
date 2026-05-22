@@ -98,6 +98,20 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
     ctaBadge: "Ready to Explore?",
     ctaTitle: "Your Next Adventure Awaits",
     ctaDesc: "Browse 500+ destinations, smart packages, and let us plan the perfect trip tailored just for you.",
+    stat1V: "500+", stat1L: "Destinations",
+    stat2V: "10K+", stat2L: "Happy Travelers",
+    stat3V: "4.9", stat3L: "Avg. Rating",
+    stat4V: "8 yrs", stat4L: "Of Excellence",
+    v1Title: "Traveler First", v1Desc: "Every decision we make starts with your experience, comfort, and delight.",
+    v2Title: "Smart Planning", v2Desc: "We blend data, local expertise, and technology to plan trips that truly fit you.",
+    v3Title: "Local Roots", v3Desc: "Our on-ground partnerships ensure authentic, sustainable travel at every destination.",
+    t1Year: "2018", t1Title: "Founded in Indore", t1Desc: "Started with a small team of passionate travelers and a bold idea: make travel planning intelligent and human.",
+    t2Year: "2020", t2Title: "Launched Holiday Calendar", t2Desc: "Introduced our signature smart holiday planner that became a go-to tool for thousands of Indian travelers.",
+    t3Year: "2023", t3Title: "10,000 Travelers Milestone", t3Desc: "Crossed 10K happy travelers with a 4.9 star average rating across all packages and destinations.",
+    t4Year: "2026 — Now", t4Title: "Expanding Globally", t4Desc: "500+ destinations, AI-powered planning, and a growing community of explorers across India and beyond.",
+    m1Name: "Aryan Mehta", m1Role: "Founder & CEO", m1Desc: "10 years in travel tech. Passionate about using data to create deeply personal journeys.",
+    m2Name: "Priya Sharma", m2Role: "Head of Experiences", m2Desc: "Curated 200+ itineraries. Knows every hidden gem from Ladakh to Lakshadweep.",
+    m3Name: "Rahul Joshi", m3Role: "Tech Lead", m3Desc: "Builds the smart tools that make travel planning feel effortless and intuitive.",
   };
 
   const handleSave = (field, val) => {
@@ -154,10 +168,14 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
               />
             </p>
             <div style={{ marginTop: 28, display: "flex", gap: 28 }}>
-              {[{ v: "500+", l: "Destinations" }, { v: "10K+", l: "Travelers" }, { v: "4.9★", l: "Rating" }].map(s => (
-                <div key={s.l}>
-                  <div style={{ fontSize: 22, fontWeight: 700, color: "white", fontFamily: "'Playfair Display',serif" }}>{s.v}</div>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.12em", marginTop: 2 }}>{s.l}</div>
+              {[{ v: content.stat1V, l: content.stat1L, f: "stat1" }, { v: content.stat2V, l: content.stat2L, f: "stat2" }, { v: content.stat3V, l: content.stat3L, f: "stat3" }].map(s => (
+                <div key={s.f}>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: "white", fontFamily: "'Playfair Display',serif" }}>
+                    <EditableText value={s.v} isAdmin={isAdmin} onSave={(val) => handleSave(s.f + "V", val)} />
+                  </div>
+                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.12em", marginTop: 2 }}>
+                    <EditableText value={s.l} isAdmin={isAdmin} onSave={(val) => handleSave(s.f + "L", val)} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -168,10 +186,19 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
       {/* ── Stat Cards ── */}
       <div style={{ maxWidth: 1100, margin: "-44px auto 0", padding: "0 32px", position: "relative", zIndex: 5 }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
-          {[{ v: "500+", l: "Destinations" }, { v: "10K+", l: "Happy Travelers" }, { v: "4.9", l: "Avg. Rating" }, { v: "8 yrs", l: "Of Excellence" }].map(s => (
-            <div key={s.l} className="ab-stat-card" style={{ background: "white", borderRadius: 16, padding: "22px 24px", border: "1px solid #f1f5f9", textAlign: "center", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
-              <div style={{ fontSize: 30, fontWeight: 700, color: themeColor, fontFamily: "'Playfair Display',serif" }}>{s.v}</div>
-              <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.l}</div>
+          {[
+            { v: content.stat1V, l: content.stat1L, f: "stat1" }, 
+            { v: content.stat2V, l: content.stat2L, f: "stat2" }, 
+            { v: content.stat3V, l: content.stat3L, f: "stat3" }, 
+            { v: content.stat4V, l: content.stat4L, f: "stat4" }
+          ].map(s => (
+            <div key={s.f} className="ab-stat-card" style={{ background: "white", borderRadius: 16, padding: "22px 24px", border: "1px solid #f1f5f9", textAlign: "center", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+              <div style={{ fontSize: 30, fontWeight: 700, color: themeColor, fontFamily: "'Playfair Display',serif" }}>
+                <EditableText value={s.v} isAdmin={isAdmin} onSave={(val) => handleSave(s.f + "V", val)} />
+              </div>
+              <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <EditableText value={s.l} isAdmin={isAdmin} onSave={(val) => handleSave(s.f + "L", val)} />
+              </div>
             </div>
           ))}
         </div>
@@ -303,14 +330,18 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
           {[
-            { icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>, title: "Traveler First", desc: "Every decision we make starts with your experience, comfort, and delight." },
-            { icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, title: "Smart Planning", desc: "We blend data, local expertise, and technology to plan trips that truly fit you." },
-            { icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>, title: "Local Roots", desc: "Our on-ground partnerships ensure authentic, sustainable travel at every destination." },
+            { icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>, title: content.v1Title, desc: content.v1Desc, f: "v1" },
+            { icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, title: content.v2Title, desc: content.v2Desc, f: "v2" },
+            { icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={themeColor} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>, title: content.v3Title, desc: content.v3Desc, f: "v3" },
           ].map(v => (
-            <div key={v.title} className="ab-value-card" style={{ background: "white", borderRadius: 16, padding: 28, border: "1px solid #f1f5f9", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+            <div key={v.f} className="ab-value-card" style={{ background: "white", borderRadius: 16, padding: 28, border: "1px solid #f1f5f9", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
               <div className="ab-value-icon" style={{ width: 52, height: 52, borderRadius: 14, background: "#FFF4E0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{v.icon}</div>
-              <h4 style={{ fontSize: 16, fontWeight: 700, color: "#111827", marginBottom: 8 }}>{v.title}</h4>
-              <p style={{ fontSize: 13, color: "#9ca3af", lineHeight: 1.65 }}>{v.desc}</p>
+              <h4 style={{ fontSize: 16, fontWeight: 700, color: "#111827", marginBottom: 8 }}>
+                <EditableText value={v.title} isAdmin={isAdmin} onSave={(val) => handleSave(v.f + "Title", val)} />
+              </h4>
+              <p style={{ fontSize: 13, color: "#9ca3af", lineHeight: 1.65 }}>
+                <EditableText value={v.desc} isAdmin={isAdmin} onSave={(val) => handleSave(v.f + "Desc", val)} multiline />
+              </p>
             </div>
           ))}
         </div>
@@ -338,17 +369,23 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
           <div style={{ position: "absolute", left: 11, top: 8, bottom: 8, width: 2, background: `linear-gradient(to bottom, ${themeColor}, rgba(232,150,12,0.08))`, borderRadius: 2 }} />
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
             {[
-              { year: "2018", title: "Founded in Indore", desc: "Started with a small team of passionate travelers and a bold idea: make travel planning intelligent and human.", dark: false },
-              { year: "2020", title: "Launched Holiday Calendar", desc: "Introduced our signature smart holiday planner that became a go-to tool for thousands of Indian travelers.", dark: false },
-              { year: "2023", title: "10,000 Travelers Milestone", desc: "Crossed 10K happy travelers with a 4.9 star average rating across all packages and destinations.", dark: false },
-              { year: "2026 — Now", title: "Expanding Globally", desc: "500+ destinations, AI-powered planning, and a growing community of explorers across India and beyond.", dark: true },
+              { year: content.t1Year, title: content.t1Title, desc: content.t1Desc, dark: false, f: "t1" },
+              { year: content.t2Year, title: content.t2Title, desc: content.t2Desc, dark: false, f: "t2" },
+              { year: content.t3Year, title: content.t3Title, desc: content.t3Desc, dark: false, f: "t3" },
+              { year: content.t4Year, title: content.t4Title, desc: content.t4Desc, dark: true, f: "t4" },
             ].map(t => (
-              <div key={t.year} className="ab-timeline-item" style={{ position: "relative", display: "flex", gap: 20, alignItems: "flex-start" }}>
+              <div key={t.f} className="ab-timeline-item" style={{ position: "relative", display: "flex", gap: 20, alignItems: "flex-start" }}>
                 <div className="ab-timeline-dot" style={{ position: "absolute", left: -28, top: 6, width: 14, height: 14, borderRadius: "50%", background: themeColor, border: "3px solid white", boxShadow: `0 0 0 2px ${themeColor}`, flexShrink: 0 }} />
                 <div style={{ background: t.dark ? "#1a1f2e" : "white", borderRadius: 14, padding: "20px 24px", border: t.dark ? "1px solid #252b3b" : "1px solid #f1f5f9", flex: 1 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: themeColor, textTransform: "uppercase", letterSpacing: "0.1em" }}>{t.year}</span>
-                  <h4 style={{ fontSize: 16, fontWeight: 700, color: t.dark ? "white" : "#111827", margin: "6px 0 8px" }}>{t.title}</h4>
-                  <p style={{ fontSize: 13, color: t.dark ? "rgba(255,255,255,0.45)" : "#9ca3af", lineHeight: 1.6 }}>{t.desc}</p>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: themeColor, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                    <EditableText value={t.year} isAdmin={isAdmin} onSave={(val) => handleSave(t.f + "Year", val)} />
+                  </span>
+                  <h4 style={{ fontSize: 16, fontWeight: 700, color: t.dark ? "white" : "#111827", margin: "6px 0 8px" }}>
+                    <EditableText value={t.title} isAdmin={isAdmin} onSave={(val) => handleSave(t.f + "Title", val)} />
+                  </h4>
+                  <p style={{ fontSize: 13, color: t.dark ? "rgba(255,255,255,0.45)" : "#9ca3af", lineHeight: 1.6 }}>
+                    <EditableText value={t.desc} isAdmin={isAdmin} onSave={(val) => handleSave(t.f + "Desc", val)} multiline />
+                  </p>
                 </div>
               </div>
             ))}
@@ -376,15 +413,21 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
           {[
-            { img: TRAVEL_IMAGES.team1, name: "Aryan Mehta", role: "Founder & CEO", desc: "10 years in travel tech. Passionate about using data to create deeply personal journeys." },
-            { img: TRAVEL_IMAGES.team2, name: "Priya Sharma", role: "Head of Experiences", desc: "Curated 200+ itineraries. Knows every hidden gem from Ladakh to Lakshadweep." },
-            { img: TRAVEL_IMAGES.team3, name: "Rahul Joshi", role: "Tech Lead", desc: "Builds the smart tools that make travel planning feel effortless and intuitive." },
+            { img: TRAVEL_IMAGES.team1, name: content.m1Name, role: content.m1Role, desc: content.m1Desc, f: "m1" },
+            { img: TRAVEL_IMAGES.team2, name: content.m2Name, role: content.m2Role, desc: content.m2Desc, f: "m2" },
+            { img: TRAVEL_IMAGES.team3, name: content.m3Name, role: content.m3Role, desc: content.m3Desc, f: "m3" },
           ].map(m => (
-            <div key={m.name} className="ab-team-card" style={{ background: "white", borderRadius: 16, padding: 28, border: "1px solid #f1f5f9", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+            <div key={m.f} className="ab-team-card" style={{ background: "white", borderRadius: 16, padding: 28, border: "1px solid #f1f5f9", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
               <img src={m.img} alt={m.name} className="ab-team-img" style={{ margin: "0 auto 14px" }} />
-              <h4 style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>{m.name}</h4>
-              <p style={{ fontSize: 12, color: themeColor, fontWeight: 600, margin: "4px 0 10px" }}>{m.role}</p>
-              <p style={{ fontSize: 13, color: "#9ca3af", lineHeight: 1.6 }}>{m.desc}</p>
+              <h4 style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>
+                <EditableText value={m.name} isAdmin={isAdmin} onSave={(val) => handleSave(m.f + "Name", val)} />
+              </h4>
+              <p style={{ fontSize: 12, color: themeColor, fontWeight: 600, margin: "4px 0 10px" }}>
+                <EditableText value={m.role} isAdmin={isAdmin} onSave={(val) => handleSave(m.f + "Role", val)} />
+              </p>
+              <p style={{ fontSize: 13, color: "#9ca3af", lineHeight: 1.6 }}>
+                <EditableText value={m.desc} isAdmin={isAdmin} onSave={(val) => handleSave(m.f + "Desc", val)} multiline />
+              </p>
             </div>
           ))}
         </div>

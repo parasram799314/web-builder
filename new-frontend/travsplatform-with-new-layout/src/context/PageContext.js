@@ -60,6 +60,24 @@ const DEFAULT_PAGE_DATA = {
       ctaBadge: "Ready to Explore?",
       ctaTitle: "Your Next Adventure Awaits",
       ctaDesc: "Browse 500+ destinations, smart packages, and let us plan the perfect trip tailored just for you.",
+      
+      stat1V: "500+", stat1L: "Destinations",
+      stat2V: "10K+", stat2L: "Happy Travelers",
+      stat3V: "4.9", stat3L: "Avg. Rating",
+      stat4V: "8 yrs", stat4L: "Of Excellence",
+      
+      v1Title: "Traveler First", v1Desc: "Every decision we make starts with your experience, comfort, and delight.",
+      v2Title: "Smart Planning", v2Desc: "We blend data, local expertise, and technology to plan trips that truly fit you.",
+      v3Title: "Local Roots", v3Desc: "Our on-ground partnerships ensure authentic, sustainable travel at every destination.",
+      
+      t1Year: "2018", t1Title: "Founded in Indore", t1Desc: "Started with a small team of passionate travelers and a bold idea: make travel planning intelligent and human.",
+      t2Year: "2020", t2Title: "Launched Holiday Calendar", t2Desc: "Introduced our signature smart holiday planner that became a go-to tool for thousands of Indian travelers.",
+      t3Year: "2023", t3Title: "10,000 Travelers Milestone", t3Desc: "Crossed 10K happy travelers with a 4.9 star average rating across all packages and destinations.",
+      t4Year: "2026 — Now", t4Title: "Expanding Globally", t4Desc: "500+ destinations, AI-powered planning, and a growing community of explorers across India and beyond.",
+      
+      m1Name: "Aryan Mehta", m1Role: "Founder & CEO", m1Desc: "10 years in travel tech. Passionate about using data to create deeply personal journeys.",
+      m2Name: "Priya Sharma", m2Role: "Head of Experiences", m2Desc: "Curated 200+ itineraries. Knows every hidden gem from Ladakh to Lakshadweep.",
+      m3Name: "Rahul Joshi", m3Role: "Tech Lead", m3Desc: "Builds the smart tools that make travel planning feel effortless and intuitive.",
     },
     blog: {
       heroBadge: "Travel Stories & Insights",

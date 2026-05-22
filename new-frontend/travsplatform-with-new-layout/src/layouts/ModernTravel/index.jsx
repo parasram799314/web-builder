@@ -154,7 +154,17 @@ function MTNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], pa
       return {
         onClick: (e) => {
           e.preventDefault();
-          if (onPageClick) onPageClick(subPageId);
+          if (subPageId) {
+            if (onPageClick) onPageClick(subPageId);
+          } else if (to.includes("#")) {
+            const hash = to.split("#")[1];
+            const el = document.getElementById(hash);
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth" });
+            }
+          } else {
+            if (onPageClick) onPageClick(null);
+          }
         }
       };
     }
@@ -713,7 +723,7 @@ export function LayoutPreview({ themeColor }) {
   );
 }
 
-export default function ModernTravelLayout({ draftData, agentId, isAdmin, updateField }) {
+export default function ModernTravelLayout({ draftData, agentId, isAdmin, updateField, onPageClick }) {
   useEffect(() => { injectCSS(); }, []);
 
   const [viewDate, setViewDate] = useState(new Date());
@@ -752,7 +762,7 @@ export default function ModernTravelLayout({ draftData, agentId, isAdmin, update
   return (
     <div className="mt-layout overflow-y-auto h-full" style={{ background: "#f8fafc", fontFamily: draftData?.fontFamily || "'Space Grotesk', sans-serif" }}>
       <div className="relative">
-        <MTNavbar branding={branding} themeColor={themeColor} isAdmin={isAdmin} onUpdate={handleUpdate} extraPages={draftData?.extraPages} pageId={agentId} />
+        <MTNavbar branding={branding} themeColor={themeColor} isAdmin={isAdmin} onUpdate={handleUpdate} extraPages={draftData?.extraPages} pageId={agentId} onPageClick={onPageClick} />
         <MTHero themeColor={themeColor} data={hero} isAdmin={isAdmin} onUpdate={handleUpdate} />
       </div>
       <MTMarquee themeColor={themeColor} data={sections?.marquee} isAdmin={isAdmin} onUpdate={handleUpdate} />

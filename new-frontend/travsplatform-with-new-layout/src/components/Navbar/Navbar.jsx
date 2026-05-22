@@ -25,7 +25,19 @@ export default function Navbar({ branding, themeColor, extraPages = [], pageId, 
       return {
         onClick: (e) => {
           e.preventDefault();
-          if (onPageClick) onPageClick(subPageId);
+          if (subPageId) {
+            if (onPageClick) onPageClick(subPageId);
+          } else if (to.includes("#")) {
+            // Anchor link in admin mode: go home first then scroll
+            if (onPageClick) onPageClick(null);
+            setTimeout(() => {
+              const hash = to.split("#")[1];
+              const el = document.getElementById(hash) || document.getElementById(`mt-${hash}`) || document.getElementById(`sps-${hash}`);
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+          } else {
+            if (onPageClick) onPageClick(null);
+          }
         }
       };
     }
@@ -33,20 +45,20 @@ export default function Navbar({ branding, themeColor, extraPages = [], pageId, 
   };
 
   return (
-    <header className="z-40 w-full bg-white border-b border-gray-100 shadow-sm">
-      <div className="px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full bg-white border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Left: Branding */}
         <div className="flex items-center gap-6">
           {brandingType === "logo" && brandingValue ? (
-            <LinkComponent {...getProps(homeUrl)} className="shrink-0">
+            <LinkComponent {...getProps(homeUrl)} className="shrink-0 flex items-center" style={{ background: "none", border: "none", padding: 0 }}>
               <img
                 src={brandingValue}
                 alt="Logo"
-                className="h-9 w-auto object-contain rounded"
+                className="h-8 w-auto object-contain rounded"
               />
             </LinkComponent>
           ) : (
-            <LinkComponent {...getProps(homeUrl)} className="text-gray-900 text-2xl font-black tracking-tight" style={{ fontFamily: "Georgia, serif", background: "none", border: "none" }}>
+            <LinkComponent {...getProps(homeUrl)} className="text-gray-900 text-xl font-black tracking-tight" style={{ fontFamily: "Georgia, serif", background: "none", border: "none", padding: 0 }}>
               {brandingValue}
             </LinkComponent>
           )}
@@ -55,8 +67,24 @@ export default function Navbar({ branding, themeColor, extraPages = [], pageId, 
         </div>
 
         {/* Center/Right: Navigation Links */}
-        <nav className="flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6">
           <LinkComponent {...getProps(homeUrl)} className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-600 transition-colors" style={{ background: "none", border: "none" }}>Home</LinkComponent>
+          
+          {/* Common Sections */}
+          {["Destinations", "Packages", "Calendar", "Contact"].map(label => (
+            <LinkComponent 
+              key={label} 
+              {...getProps(`${homeUrl}#${label.toLowerCase()}`)} 
+              className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-600 transition-colors"
+              style={{ background: "none", border: "none" }}
+            >
+              {label}
+            </LinkComponent>
+          ))}
+
+          {/* Extra Pages Links */}
+          {extraPages.length > 0 && <div className="h-4 w-px bg-gray-200 mx-2" />}
+          
           {extraPages.map((pId) => (
             <LinkComponent 
               key={pId} 

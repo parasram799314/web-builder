@@ -1050,12 +1050,12 @@ export default function AdminPage() {
                    />
                 ) : previewSubPage ? (
                    <div className="flex-1 overflow-auto">
-                      {previewSubPage === 'about' && <AboutPage pageData={pageData} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
-                      {previewSubPage === 'blog' && <BlogPage pageData={pageData} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
-                      {previewSubPage === 'help' && <HelpPage pageData={pageData} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
-                      {previewSubPage === 'contact_page' && <ContactPage pageData={pageData} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
-                      {previewSubPage === 'privacy' && <PrivacyPage pageData={pageData} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
-                      {previewSubPage === 'terms' && <TermsPage pageData={pageData} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
+                      {previewSubPage === 'about' && <AboutPage pageData={pageData} pageId={currentPageId || pageData?.userId} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
+                      {previewSubPage === 'blog' && <BlogPage pageData={pageData} pageId={currentPageId || pageData?.userId} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
+                      {previewSubPage === 'help' && <HelpPage pageData={pageData} pageId={currentPageId || pageData?.userId} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
+                      {previewSubPage === 'contact_page' && <ContactPage pageData={pageData} pageId={currentPageId || pageData?.userId} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
+                      {previewSubPage === 'privacy' && <PrivacyPage pageData={pageData} pageId={currentPageId || pageData?.userId} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
+                      {previewSubPage === 'terms' && <TermsPage pageData={pageData} pageId={currentPageId || pageData?.userId} isAdmin={true} onPageClick={(id) => setPreviewSubPage(id)} />}
                    </div>
                 ) : ActiveLayoutComponent ? (
                   <div className="flex-1 overflow-hidden">
@@ -1134,10 +1134,18 @@ export default function AdminPage() {
                           agentId={pageData?.userId} 
                           isAdmin={true}
                           updateField={updateField}
+                          onPageClick={(id) => setPreviewSubPage(id)}
                         />
                       ) : (
                         <>
-                          <Navbar branding={pageData?.branding} themeColor={pageData?.themeColor} />
+                          <Navbar 
+                            branding={pageData?.branding} 
+                            themeColor={themeColor} 
+                            extraPages={pageData?.extraPages} 
+                            pageId={pageData?.userId}
+                            isAdmin={true}
+                            onPageClick={(id) => setPreviewSubPage(id)}
+                          />
                           <div className="flex flex-col gap-2 p-2">
                             <div className="bg-white rounded-xl shadow-sm p-2">
                               <Calendar selectedCountries={pageData?.countries || ["india"]} isAdmin={false} />

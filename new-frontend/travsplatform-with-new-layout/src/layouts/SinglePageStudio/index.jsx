@@ -140,7 +140,7 @@ function getColors(themeColor) {
 }
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
-function SPSNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], pageId }) {
+function SPSNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], pageId, onPageClick }) {
   const [scrolled, setScrolled] = useState(false);
   const colors = getColors(themeColor);
 
@@ -164,6 +164,31 @@ function SPSNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], p
   const brandVal = branding?.value || "/logo3.png";
   const brandType = branding?.type || "logo";
 
+  // In admin mode, we want to prevent navigation and instead use onPageClick if provided
+  const LinkComponent = isAdmin ? "button" : Link;
+  const getProps = (to, subPageId = null) => {
+    if (isAdmin) {
+      return {
+        onClick: (e) => {
+          e.preventDefault();
+          if (subPageId) {
+            if (onPageClick) onPageClick(subPageId);
+          } else if (to.includes("#")) {
+            const hash = to.split("#")[1];
+            const el = document.getElementById(hash);
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth" });
+            }
+          } else {
+            if (onPageClick) onPageClick(null);
+          }
+        },
+        style: { background: "none", border: "none", cursor: "pointer", padding: 0 }
+      };
+    }
+    return { to };
+  };
+
   return (
     <nav style={{
       position: "sticky", top: 0, left: 0, right: 0, zIndex: 50,
@@ -175,15 +200,15 @@ function SPSNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], p
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Link to={homeUrl} style={{ width: 36, height: 36, borderRadius: 10, background: colors.primary, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
+          <LinkComponent {...getProps(homeUrl)} style={{ width: 36, height: 36, borderRadius: 10, background: colors.primary, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", border: "none", cursor: "pointer" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
             </svg>
-          </Link>
+          </LinkComponent>
           {brandType === "logo" && branding?.value ? (
-            <Link to={homeUrl}>
+            <LinkComponent {...getProps(homeUrl)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
               <img src={branding.value} alt="Logo" style={{ height: 32, objectFit: "contain" }} />
-            </Link>
+            </LinkComponent>
           ) : (
             <EditableText 
               value={brandVal} 
@@ -198,18 +223,18 @@ function SPSNavbar({ branding, themeColor, isAdmin, onUpdate, extraPages = [], p
         {/* Desktop links */}
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           {["Packages", "Calendar", "Contact"].map((l) => (
-             <Link key={l} to={`${homeUrl}#sps-${l.toLowerCase()}`} style={{ fontSize: 14, fontWeight: 600, color: colors.mutedFg, textDecoration: "none" }}>
+             <LinkComponent key={l} {...getProps(`${homeUrl}#sps-${l.toLowerCase()}`)} style={{ fontSize: 14, fontWeight: 600, color: colors.mutedFg, textDecoration: "none", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                {l}
-             </Link>
+             </LinkComponent>
           ))}
           {extraPages.map((pId) => (
-            <Link 
+            <LinkComponent 
               key={pId} 
-              to={`${homeUrl}?subPage=${pId}`} 
-              style={{ fontSize: 14, fontWeight: 600, color: colors.primary, textDecoration: "none", paddingLeft: 12, borderLeft: `1px solid ${colors.border}` }}
+              {...getProps(`${homeUrl}?subPage=${pId}`, pId)}
+              style={{ fontSize: 14, fontWeight: 600, color: colors.primary, textDecoration: "none", paddingLeft: 12, borderLeft: `1px solid ${colors.border}`, background: "none", border: "none", cursor: "pointer" }}
             >
               {PAGE_MAP[pId] || pId}
-            </Link>
+            </LinkComponent>
           ))}
         </div>
       </div>
@@ -742,7 +767,7 @@ export function LayoutPreview({ themeColor }) {
 }
 
 // ─── Main Layout Export ───────────────────────────────────────────────────────
-export default function SinglePageStudioLayout({ draftData, agentId, isAdmin, updateField }) {
+export default function SinglePageStudioLayout({ draftData, agentId, isAdmin, updateField, onPageClick }) {
   useEffect(() => { injectSPSCSS(); }, []);
 
   const [viewDate, setViewDate] = useState(new Date());
@@ -779,7 +804,7 @@ export default function SinglePageStudioLayout({ draftData, agentId, isAdmin, up
 
   return (
     <div className="sps-layout" style={{ overflowY: "auto", height: "100%", fontFamily: draftData?.fontFamily || "'DM Sans', sans-serif" }}>
-      <SPSNavbar branding={branding} themeColor={themeColor} isAdmin={isAdmin} onUpdate={handleUpdate} extraPages={draftData?.extraPages} pageId={agentId} />
+      <SPSNavbar branding={branding} themeColor={themeColor} isAdmin={isAdmin} onUpdate={handleUpdate} extraPages={draftData?.extraPages} pageId={agentId} onPageClick={onPageClick} />
       <SPSHero themeColor={themeColor} data={hero} isAdmin={isAdmin} onUpdate={handleUpdate} />
       
       <div style={{ display: "flex", flexDirection: "column" }}>

@@ -1,6 +1,7 @@
 // src/pages/ExtraPage.jsx
 import React from "react";
 import Navbar from "../components/Navbar/Navbar";
+import SubNavbar from "../components/Navbar/SubNavbar";
 import { Link } from "react-router-dom";
 
 // Import real components for each page type
@@ -66,6 +67,13 @@ export default function ExtraPage({ type, pageData, pageId, isAdmin, onPageClick
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar 
         branding={pageData?.branding} 
+        themeColor={themeColor} 
+        extraPages={pageData?.extraPages} 
+        pageId={pageId} 
+        isAdmin={isAdmin}
+        onPageClick={onPageClick}
+      />
+      <SubNavbar 
         themeColor={themeColor} 
         extraPages={pageData?.extraPages} 
         pageId={pageId} 

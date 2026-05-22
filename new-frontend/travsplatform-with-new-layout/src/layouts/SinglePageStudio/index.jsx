@@ -234,7 +234,7 @@ function SPSHero({ themeColor, data, isAdmin, onUpdate }) {
       {/* Background */}
       <div style={{ position: "absolute", inset: 0 }}>
         <img
-          src="/assets/hero-travel.webp"
+          src="/assets/hero-travel.jpg"
           alt="Hero"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
           onError={(e) => { e.target.style.background = "linear-gradient(135deg, #1a1f3c 0%, #2d4a8a 100%)"; e.target.style.display = "none"; }}

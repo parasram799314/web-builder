@@ -105,8 +105,8 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      <style>{ABOUT_CSS}</style>
+    <div className="ab-root" style={{ minHeight: "100vh" }}>
+      <style>{CSS}</style>
 
       {/* ── Navbar ── */}
       <Navbar 
@@ -119,7 +119,6 @@ export default function AboutPage({ pageData, pageId, isAdmin, onPageClick }) {
       />
 
       {/* ── Hero ── */}
-
       <section style={{ position: "relative", height: 480, overflow: "hidden" }}>
         <img className="ab-hero-img" src={TRAVEL_IMAGES.hero} alt="Travel hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(15,20,40,0.82) 0%, rgba(15,20,40,0.55) 50%, rgba(15,20,40,0.7) 100%)" }} />

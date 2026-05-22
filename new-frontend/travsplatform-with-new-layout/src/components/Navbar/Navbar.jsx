@@ -33,41 +33,45 @@ export default function Navbar({ branding, themeColor, extraPages = [], pageId, 
   };
 
   return (
-    <nav
-      style={{ backgroundColor: bgColor }}
-      className="px-8 py-0 flex items-center justify-between h-14 shadow-md w-full z-40"
-    >
-      {/* Logo / Branding */}
-      {brandingType === "logo" && brandingValue ? (
-        <LinkComponent {...getProps(homeUrl)}>
-          <img
-            src={brandingValue}
-            alt="Logo"
-            className="h-9 w-auto object-contain rounded"
-          />
-        </LinkComponent>
-      ) : (
-        <LinkComponent {...getProps(homeUrl)} className="text-white text-2xl font-black tracking-tight" style={{ fontFamily: "Georgia, serif", background: "none", border: "none" }}>
-          {brandingValue}
-        </LinkComponent>
-      )}
+    <header className="z-40 w-full bg-white border-b border-gray-100 shadow-sm">
+      <div className="px-8 h-16 flex items-center justify-between">
+        {/* Left: Branding */}
+        <div className="flex items-center gap-6">
+          {brandingType === "logo" && brandingValue ? (
+            <LinkComponent {...getProps(homeUrl)} className="shrink-0">
+              <img
+                src={brandingValue}
+                alt="Logo"
+                className="h-9 w-auto object-contain rounded"
+              />
+            </LinkComponent>
+          ) : (
+            <LinkComponent {...getProps(homeUrl)} className="text-gray-900 text-2xl font-black tracking-tight" style={{ fontFamily: "Georgia, serif", background: "none", border: "none" }}>
+              {brandingValue}
+            </LinkComponent>
+          )}
+          
+          <div className="h-6 w-px bg-gray-100 hidden md:block"></div>
+        </div>
 
-      {/* Nav Links */}
-      <div className="hidden md:flex items-center gap-6">
-        <LinkComponent {...getProps(homeUrl)} className="text-white text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity" style={{ background: "none", border: "none" }}>Home</LinkComponent>
-        {extraPages.map((pId) => (
-          <LinkComponent 
-            key={pId} 
-            {...getProps(`${homeUrl}?subPage=${pId}`, pId)}
-            className="text-white text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity"
-            style={{ background: "none", border: "none" }}
-          >
-            {PAGE_MAP[pId] || pId}
-          </LinkComponent>
-        ))}
+        {/* Center/Right: Navigation Links */}
+        <nav className="flex items-center gap-8">
+          <LinkComponent {...getProps(homeUrl)} className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-600 transition-colors" style={{ background: "none", border: "none" }}>Home</LinkComponent>
+          {extraPages.map((pId) => (
+            <LinkComponent 
+              key={pId} 
+              {...getProps(`${homeUrl}?subPage=${pId}`, pId)}
+              className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-600 transition-colors"
+              style={{ background: "none", border: "none" }}
+            >
+              {PAGE_MAP[pId] || pId}
+            </LinkComponent>
+          ))}
+        </nav>
+
+        {/* Mobile Spacer */}
+        <div className="md:hidden" />
       </div>
-
-      <div className="md:hidden" />
-    </nav>
+    </header>
   );
 }

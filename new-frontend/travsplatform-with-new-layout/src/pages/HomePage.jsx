@@ -76,6 +76,40 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
+    <header className="z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+      <div className="px-8 h-16 flex items-center justify-between">
+        {/* Left: Title */}
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Dashboard / Tool Selection</span>
+            <p className="text-[10px] text-gray-500 font-medium hidden md:block">Build and manage your travel empire.</p>
+          </div>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5 bg-green-50 px-3 py-1.5 rounded-full border border-green-100">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="text-[9px] font-black text-green-700 uppercase tracking-widest">System Online</span>
+          </div>
+          
+          <div className="h-6 w-px bg-gray-100"></div>
+          
+          <button
+            onClick={handleLogout}
+            className="text-gray-400 hover:text-red-600 transition-colors"
+            title="Sign Out"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
       {/* Main Content */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-8 py-8 flex flex-col justify-center">
         {/* Welcome Header */}

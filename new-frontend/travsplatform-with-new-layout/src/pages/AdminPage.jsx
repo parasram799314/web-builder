@@ -334,7 +334,7 @@ function ExtraPagesManager({ extraPages = [], onToggle, themeColor }) {
 }
 
 export default function AdminPage() {
-  const { pageData, updateField, loadingPage, backendWakingUp, currentPageId } = usePageContext();
+  const { pageData, updateField, loadingPage, backendWakingUp, currentPageId, saving } = usePageContext();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const initialMode = queryParams.get("tool") || "website";

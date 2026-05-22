@@ -53,7 +53,7 @@ function PrivateRoute({ children, allowedRoles }) {
     );
   }
 
-  if (allowedRoles && !allowedRoles.includes(role) && role !== "admin" && role !== "user") {
+  if (allowedRoles && !allowedRoles.includes(role)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md text-center">
@@ -81,6 +81,8 @@ function PrivateRoute({ children, allowedRoles }) {
 }
 
 export default function App() {
+  const ALL_ACCESS_ROLES = ["admin", "agent", "user", "manager", "employee", "hr"];
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -89,7 +91,7 @@ export default function App() {
           <Route
             path="/"
             element={
-              <PrivateRoute allowedRoles={["admin", "agent", "user"]}>
+              <PrivateRoute allowedRoles={ALL_ACCESS_ROLES}>
                 <HomePage />
               </PrivateRoute>
             }
@@ -99,7 +101,7 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              <PrivateRoute allowedRoles={["admin", "agent", "user"]}>
+              <PrivateRoute allowedRoles={ALL_ACCESS_ROLES}>
                 <PageProvider>
                   <AdminPage />
                 </PageProvider>

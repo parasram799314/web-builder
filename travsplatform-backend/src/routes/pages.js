@@ -17,7 +17,7 @@ router.get("/view/:pageId", getPublicPage);
 
 // ── Protected (requires Firebase auth token) ──────────────────────
 // Apply role check for all following routes
-router.use(verifyToken, requireRole(["admin", "agent"]));
+router.use(verifyToken, requireRole(["admin", "agent", "user", "manager", "employee", "hr"]));
 
 // GET    /api/pages      →  list all agent's pages
 router.get("/", getAllMyPages);

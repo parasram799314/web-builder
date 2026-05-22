@@ -10,7 +10,7 @@ const {
 } = require("../controllers/packagesController");
 
 // All package routes require auth and specific roles
-router.use(verifyToken, requireRole(["admin", "agent"]));
+router.use(verifyToken, requireRole(["admin", "agent", "user", "manager", "employee", "hr"]));
 
 // GET    /api/packages           →  get all packages for agent
 router.get("/", getPackages);

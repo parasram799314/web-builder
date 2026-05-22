@@ -14,7 +14,7 @@ router.post("/:agentId", submitInquiry);
 
 // ── Protected ─────────────────────────────────────────────────────
 // Apply role check for following routes
-router.use(verifyToken, requireRole(["admin", "agent"]));
+router.use(verifyToken, requireRole(["admin", "agent", "user", "manager", "employee", "hr"]));
 
 // GET   /api/contact/inquiries               →  agent's all inquiries
 router.get("/inquiries", getInquiries);
